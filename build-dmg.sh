@@ -16,7 +16,7 @@ set -euo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
 cd "$HERE"
 
-VERSION="1.1.0"
+VERSION="1.2.0"
 IDENTIFIER="com.mhmtbsbyndr.deli.dl888d.driver"
 PRODUCT_NAME="Deli DL-888D PRO Driver"
 DMG_VOLNAME="Deli DL-888D PRO Driver"

@@ -43,15 +43,16 @@ lpoptions -p Deli_DL888D_PRO -l   # show density/speed/gap options
 ## Supported options (via PPD)
 
 - **Resolution**: **300 dpi** (native)
-- **PageSize** (24 presets + Custom):
-  15×30, 20×30, 25×15, 30×20, 30×30,
+- **PageSize** (28 presets):
+  15×30, 20×30, 25×15,
+  30×20, 30×30,
   40×20, 40×30, 40×40,
   50×20, 50×30, 50×40, 50×50,
-  60×40, 60×50,
-  70×50, 75×50,
-  80×40, 80×50, 80×60,
-  100×50, 100×60, 100×70, 100×100, 100×150 mm,
-  Custom (max width 113 mm, max height 1067 mm)
+  60×30, 60×40, 60×50,
+  70×30, 70×40, 70×50,
+  75×50,
+  80×30, 80×40, 80×50, 80×60,
+  100×50, 100×60, 100×70, 100×100, 100×150 mm
 - **Density**: 1 – 15 (darkness)
 - **Speed**: 2 – 6 ips (default 3)
 - **MediaGap**: 2 mm / 3 mm gap, Continuous, Black Mark

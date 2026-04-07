@@ -20,7 +20,7 @@
 *FileSystem: False
 *Throughput: "8"
 *LandscapeOrientation: Plus90
-*VariablePaperSize: True
+*VariablePaperSize: False
 *TTRasterizer: Type42
 
 *% ---------------------------------------------------------------
@@ -44,10 +44,14 @@
 *PageSize w142h85/ 50 x  30 mm: "<</PageSize[142 85]/ImagingBBox null>>setpagedevice"
 *PageSize w142h113/ 50 x  40 mm: "<</PageSize[142 113]/ImagingBBox null>>setpagedevice"
 *PageSize w142h142/ 50 x  50 mm: "<</PageSize[142 142]/ImagingBBox null>>setpagedevice"
+*PageSize w170h85/  60 x  30 mm: "<</PageSize[170 85]/ImagingBBox null>>setpagedevice"
 *PageSize w170h113/ 60 x  40 mm: "<</PageSize[170 113]/ImagingBBox null>>setpagedevice"
 *PageSize w170h142/ 60 x  50 mm: "<</PageSize[170 142]/ImagingBBox null>>setpagedevice"
+*PageSize w198h85/  70 x  30 mm: "<</PageSize[198 85]/ImagingBBox null>>setpagedevice"
+*PageSize w198h113/ 70 x  40 mm: "<</PageSize[198 113]/ImagingBBox null>>setpagedevice"
 *PageSize w198h142/ 70 x  50 mm: "<</PageSize[198 142]/ImagingBBox null>>setpagedevice"
 *PageSize w213h142/ 75 x  50 mm: "<</PageSize[213 142]/ImagingBBox null>>setpagedevice"
+*PageSize w227h85/  80 x  30 mm: "<</PageSize[227 85]/ImagingBBox null>>setpagedevice"
 *PageSize w227h113/ 80 x  40 mm: "<</PageSize[227 113]/ImagingBBox null>>setpagedevice"
 *PageSize w227h142/ 80 x  50 mm: "<</PageSize[227 142]/ImagingBBox null>>setpagedevice"
 *PageSize w227h170/ 80 x  60 mm: "<</PageSize[227 170]/ImagingBBox null>>setpagedevice"
@@ -56,13 +60,6 @@
 *PageSize w283h198/100 x  70 mm: "<</PageSize[283 198]/ImagingBBox null>>setpagedevice"
 *PageSize w283h283/100 x 100 mm: "<</PageSize[283 283]/ImagingBBox null>>setpagedevice"
 *PageSize w283h425/100 x 150 mm: "<</PageSize[283 425]/ImagingBBox null>>setpagedevice"
-*PageSize Custom/Custom Size: ""
-*CustomPageSize True: "pop pop pop <</PageSize[5 -2 roll]/ImagingBBox null>>setpagedevice"
-*ParamCustomPageSize Width:        1 points 43 320
-*ParamCustomPageSize Height:       2 points 43 3024
-*ParamCustomPageSize WidthOffset:  3 points 0 0
-*ParamCustomPageSize HeightOffset: 4 points 0 0
-*ParamCustomPageSize Orientation:  5 int    0 0
 *CloseUI: *PageSize
 
 *OpenUI *PageRegion: PickOne
@@ -80,10 +77,14 @@
 *PageRegion w142h85/ 50 x  30 mm: "<</PageSize[142 85]/ImagingBBox null>>setpagedevice"
 *PageRegion w142h113/ 50 x  40 mm: "<</PageSize[142 113]/ImagingBBox null>>setpagedevice"
 *PageRegion w142h142/ 50 x  50 mm: "<</PageSize[142 142]/ImagingBBox null>>setpagedevice"
+*PageRegion w170h85/  60 x  30 mm: "<</PageSize[170 85]/ImagingBBox null>>setpagedevice"
 *PageRegion w170h113/ 60 x  40 mm: "<</PageSize[170 113]/ImagingBBox null>>setpagedevice"
 *PageRegion w170h142/ 60 x  50 mm: "<</PageSize[170 142]/ImagingBBox null>>setpagedevice"
+*PageRegion w198h85/  70 x  30 mm: "<</PageSize[198 85]/ImagingBBox null>>setpagedevice"
+*PageRegion w198h113/ 70 x  40 mm: "<</PageSize[198 113]/ImagingBBox null>>setpagedevice"
 *PageRegion w198h142/ 70 x  50 mm: "<</PageSize[198 142]/ImagingBBox null>>setpagedevice"
 *PageRegion w213h142/ 75 x  50 mm: "<</PageSize[213 142]/ImagingBBox null>>setpagedevice"
+*PageRegion w227h85/  80 x  30 mm: "<</PageSize[227 85]/ImagingBBox null>>setpagedevice"
 *PageRegion w227h113/ 80 x  40 mm: "<</PageSize[227 113]/ImagingBBox null>>setpagedevice"
 *PageRegion w227h142/ 80 x  50 mm: "<</PageSize[227 142]/ImagingBBox null>>setpagedevice"
 *PageRegion w227h170/ 80 x  60 mm: "<</PageSize[227 170]/ImagingBBox null>>setpagedevice"
@@ -107,10 +108,14 @@
 *ImageableArea w142h85:  "0 0 142  85"
 *ImageableArea w142h113: "0 0 142 113"
 *ImageableArea w142h142: "0 0 142 142"
+*ImageableArea w170h85:  "0 0 170  85"
 *ImageableArea w170h113: "0 0 170 113"
 *ImageableArea w170h142: "0 0 170 142"
+*ImageableArea w198h85:  "0 0 198  85"
+*ImageableArea w198h113: "0 0 198 113"
 *ImageableArea w198h142: "0 0 198 142"
 *ImageableArea w213h142: "0 0 213 142"
+*ImageableArea w227h85:  "0 0 227  85"
 *ImageableArea w227h113: "0 0 227 113"
 *ImageableArea w227h142: "0 0 227 142"
 *ImageableArea w227h170: "0 0 227 170"
@@ -133,10 +138,14 @@
 *PaperDimension w142h85:  "142  85"
 *PaperDimension w142h113: "142 113"
 *PaperDimension w142h142: "142 142"
+*PaperDimension w170h85:  "170  85"
 *PaperDimension w170h113: "170 113"
 *PaperDimension w170h142: "170 142"
+*PaperDimension w198h85:  "198  85"
+*PaperDimension w198h113: "198 113"
 *PaperDimension w198h142: "198 142"
 *PaperDimension w213h142: "213 142"
+*PaperDimension w227h85:  "227  85"
 *PaperDimension w227h113: "227 113"
 *PaperDimension w227h142: "227 142"
 *PaperDimension w227h170: "227 170"
