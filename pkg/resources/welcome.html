@@ -1,0 +1,16 @@
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family: -apple-system, sans-serif; padding: 20px; line-height: 1.5;">
+  <h2>Deli DL-888D PRO – macOS Driver</h2>
+  <p>This installer sets up a native CUPS driver for the Deli DL-888D PRO thermal label printer.</p>
+  <p>What it does:</p>
+  <ul>
+    <li>Installs the <code>rastertotspl</code> filter into <code>/usr/libexec/cups/filter</code></li>
+    <li>Installs the PPD into <code>/Library/Printers/PPDs/Contents/Resources</code></li>
+    <li>Reloads CUPS</li>
+    <li>Auto-detects the printer over USB and creates a queue called <b>Deli_DL888D_PRO</b></li>
+  </ul>
+  <p>After install, test from Terminal:</p>
+  <pre>echo "Hallo" | lp -d Deli_DL888D_PRO</pre>
+</body>
+</html>

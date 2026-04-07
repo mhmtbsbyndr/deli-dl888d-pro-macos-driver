@@ -3,16 +3,16 @@
 *FileVersion: "1.0"
 *LanguageVersion: English
 *LanguageEncoding: ISOLatin1
-*PCFileName: "DELI880D.PPD"
+*PCFileName: "DELI888D.PPD"
 *Manufacturer: "Deli"
-*Product: "(DL-880D Pro)"
+*Product: "(DL-888D PRO)"
 *cupsVersion: 2.0
 *cupsManualCopies: True
 *cupsFilter: "application/vnd.cups-raster 100 rastertotspl"
 *cupsModelNumber: 0
-*ModelName: "Deli DL-880D Pro"
-*ShortNickName: "Deli DL-880D Pro"
-*NickName: "Deli DL-880D Pro (TSPL)"
+*ModelName: "Deli DL-888D PRO"
+*ShortNickName: "Deli DL-888D PRO"
+*NickName: "Deli DL-888D PRO (TSPL)"
 *PSVersion: "(3010.000) 0"
 *LanguageLevel: "3"
 *ColorDevice: False

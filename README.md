@@ -1,105 +1,109 @@
-# Deli DL-880D Pro – CUPS Driver für macOS
+# Deli DL-888D PRO – macOS CUPS Driver
 
-Ein einfacher, nativer CUPS-Treiber (Filter + PPD) für den Deli
-**DL-880D Pro** Thermo-Etikettendrucker. Der Filter wandelt den
-1-Bit-CUPS-Raster in **TSPL/TSPL2**-Befehle um – das Protokoll, das
-diese Geräte (und die meisten Deli/TSC-kompatiblen 203-dpi-Label-
-printer) verstehen.
+A tiny, native CUPS driver (PPD + TSPL2 raster filter) for the
+**Deli DL-888D PRO** thermal label printer. The filter converts
+CUPS 1-bit raster output into **TSPL/TSPL2** – the command language
+the printer speaks natively.
 
-> Hinweis: Ich habe den Treiber ohne Zugriff auf die offizielle
-> Deli-SDK-Dokumentation geschrieben. Die Befehle basieren auf dem
-> öffentlich dokumentierten TSPL2-Standard, den der DL-880D Pro
-> verwendet. Wenn der Druck schräg, invertiert oder leer erscheint,
-> siehe Abschnitt **Tuning**.
+Distributed as a signed-free `.pkg` installer inside a `.dmg`.
 
-## Dateien
+## Download
 
-| Datei              | Zweck                                      |
-|--------------------|--------------------------------------------|
-| `deli-dl880d.ppd`  | CUPS PPD (Größen, Auflösung, Density, Gap) |
-| `rastertotspl.c`   | CUPS-Raster→TSPL-Filter in C               |
-| `Makefile`         | Baut & installiert den Filter              |
-| `install.sh`       | Komfort-Wrapper mit USB-Auto-Detect        |
+Grab the latest `Deli-DL888D-PRO-Driver.dmg` from
+[GitHub Releases](https://github.com/mhmtbsbyndr/deli-dl888d-pro-macos-driver/releases).
 
-## Voraussetzungen
+## Install (GUI)
 
-- macOS (getestet gegen die Standard-CUPS-Installation)
-- Xcode Command Line Tools (`xcode-select --install`) – liefert
-  `cc`, `make`, und die CUPS-Header (`libcups`, `libcupsimage`)
+1. Open the DMG.
+2. Double-click **Install Deli DL-888D PRO Driver.pkg**.
+   - macOS will say the package is from an unidentified developer.
+     Right-click → **Open** → **Open Anyway** in
+     *System Settings → Privacy & Security*.
+3. Follow the installer.
+4. Done. If the printer is plugged in over USB, a CUPS queue named
+   `Deli_DL888D_PRO` has already been created for you.
 
-## Bauen & installieren
+## Test print
 
 ```bash
-cd /tmp/deli-dl880d
-chmod +x install.sh
-sudo ./install.sh --add-usb     # baut, installiert, fügt USB-Drucker hinzu
+echo "Hallo von macOS" | lp -d Deli_DL888D_PRO
+lpoptions -p Deli_DL888D_PRO -l   # show density/speed/gap options
 ```
 
-Oder Schritt-für-Schritt:
+## What the installer does
 
-```bash
-make
-sudo make install
-# dann im Systemeinstellungen → Drucker & Scanner → "+" hinzufügen,
-# "Software auswählen…" → "Deli DL-880D Pro (TSPL)"
-```
+| Step | Action |
+|---|---|
+| 1 | Copies `rastertotspl` → `/usr/libexec/cups/filter/` |
+| 2 | Copies `deli-dl888d-pro.ppd` → `/Library/Printers/PPDs/Contents/Resources/` |
+| 3 | Reloads CUPS via `launchctl kickstart` |
+| 4 | Runs `lpinfo -v` to find a connected Deli printer and creates queue `Deli_DL888D_PRO` via `lpadmin` |
+| 5 | Logs everything to `/var/log/install.log` (grep for `[deli-driver]`) |
 
-## Testdruck
-
-```bash
-# Einfacher Textdruck
-echo "Hallo von macOS" | lp -d Deli_DL880D_Pro
-
-# PDF
-lp -d Deli_DL880D_Pro -o media=w288h432 label.pdf
-```
-
-## Unterstützte Optionen (PPD)
+## Supported options (via PPD)
 
 - **PageSize**: 40×30, 60×40, 80×40, 100×67, 100×150 mm + Custom
-- **Resolution**: 203 dpi (nativ)
-- **Density**: 1 – 15 (Schwärze)
+- **Resolution**: 203 dpi (native)
+- **Density**: 1 – 15 (darkness)
 - **Speed**: 2 – 6 ips
-- **MediaGap**: 2 mm / 3 mm Gap, Continuous, Black Mark
+- **MediaGap**: 2 mm / 3 mm gap, Continuous, Black Mark
 
-Alles über CUPS abrufbar:
-
-```bash
-lpoptions -p Deli_DL880D_Pro -l
-```
-
-## Deinstallation
+## Build from source
 
 ```bash
-sudo ./install.sh --remove
+# Build just the filter binary
+make
+
+# Build the full DMG (filter + pkg + dmg)
+./build-dmg.sh
+# → output/Deli-DL888D-PRO-Driver.dmg
 ```
 
-## Tuning / Troubleshooting
+Requires Xcode Command Line Tools (`xcode-select --install`).
 
-| Symptom                         | Abhilfe                                                  |
-|---------------------------------|----------------------------------------------------------|
-| Ausdruck komplett invertiert    | In `rastertotspl.c` das `~line[i]` durch `line[i]` ersetzen und neu kompilieren. |
-| Nur leere Labels                | Medientyp prüfen – bei Endlospapier `MediaGap=Continuous`. |
-| Etikett verschoben              | `GAP 2 mm,0 mm` an tatsächliche Lücke anpassen (PPD-Option). |
-| Drucker zieht zu viele Labels   | In `emit_page_header()` `REFERENCE 0,0` ggf. auf `REFERENCE 0,16` setzen. |
-| Schwacher Druck                 | `Density` in den Druckoptionen erhöhen.                  |
-| USB nicht gefunden              | `lpinfo -v` → URI manuell mit `lpadmin -v <URI>` setzen. |
+## Uninstall
 
-## Architektur in 30 Sekunden
+```bash
+sudo lpadmin -x Deli_DL888D_PRO 2>/dev/null
+sudo rm -f /usr/libexec/cups/filter/rastertotspl
+sudo rm -f /Library/Printers/PPDs/Contents/Resources/deli-dl888d-pro.ppd
+sudo launchctl kickstart -k system/org.cups.cupsd
+```
+
+## Architecture
 
 ```
-App → Quartz/PDF → CUPS-Pipeline → pstoraster → rastertotspl → USB → Drucker
-                                                 ↑
-                                        liest 1-Bit-CUPS-Raster,
-                                        emittiert TSPL-Bytes:
-                                          SIZE w,h
-                                          GAP  g
-                                          DENSITY/SPEED
+App → Quartz/PDF → CUPS pipeline → pstoraster → rastertotspl → USB → printer
+                                                    │
+                                                    ▼
+                                        Reads 1-bit CUPS raster,
+                                        emits TSPL:
+                                          SIZE  w mm, h mm
+                                          GAP   2 mm,0 mm
+                                          DENSITY 8
+                                          SPEED   4
                                           CLS
-                                          BITMAP 0,0,wb,h,0,<bytes>
-                                          PRINT  1,copies
+                                          BITMAP  0,0,wb,h,0,<bytes>
+                                          PRINT   1,copies
 ```
 
-Die Bildinvertierung (`~b`) ist nötig, weil CUPS 1-Bit-K mit
-`1 = Tinte` arbeitet, TSPL-BITMAP-Mode 0 aber `0 = Punkt setzen`
-erwartet.
+The bit inversion (`~b`) in `rastertotspl.c` is required because
+CUPS 1-bit-K encodes `1 = ink`, while TSPL `BITMAP` mode 0 wants
+`0 = dot`.
+
+## Files
+
+| Path | Purpose |
+|---|---|
+| `rastertotspl.c` | CUPS raster → TSPL filter (C) |
+| `deli-dl888d-pro.ppd` | PPD with paper sizes, density, speed, gap |
+| `Makefile` | Builds filter + `make install` dev path |
+| `install.sh` | CLI installer (dev path) |
+| `build-dmg.sh` | Builds the distributable .pkg + .dmg |
+| `pkg/scripts/postinstall` | Runs at install time: reload CUPS, add queue |
+| `pkg/distribution.xml` | Installer UI (title, welcome, conclusion) |
+| `pkg/resources/` | Installer HTML pages + license |
+
+## License
+
+MIT – see `LICENSE`.

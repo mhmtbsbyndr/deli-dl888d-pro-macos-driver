@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<installer-gui-script minSpecVersion="2">
+    <title>Deli DL-888D PRO Driver</title>
+    <organization>com.mhmtbsbyndr.deli</organization>
+    <domains enable_localSystem="true"/>
+    <options customize="never" require-scripts="true" rootVolumeOnly="true"/>
+    <welcome    file="welcome.html"   mime-type="text/html"/>
+    <conclusion file="conclusion.html" mime-type="text/html"/>
+    <license    file="LICENSE.txt"/>
+    <pkg-ref id="com.mhmtbsbyndr.deli.dl888d.driver"/>
+    <choices-outline>
+        <line choice="default">
+            <line choice="com.mhmtbsbyndr.deli.dl888d.driver"/>
+        </line>
+    </choices-outline>
+    <choice id="default"/>
+    <choice id="com.mhmtbsbyndr.deli.dl888d.driver"
+            visible="false"
+            title="Deli DL-888D PRO Driver"
+            description="CUPS filter + PPD for the Deli DL-888D PRO thermal label printer">
+        <pkg-ref id="com.mhmtbsbyndr.deli.dl888d.driver"/>
+    </choice>
+    <pkg-ref id="com.mhmtbsbyndr.deli.dl888d.driver"
+             version="1.0.0"
+             onConclusion="none">deli-dl888d-pro-driver-component.pkg</pkg-ref>
+</installer-gui-script>

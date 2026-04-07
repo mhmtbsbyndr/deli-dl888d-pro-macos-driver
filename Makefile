@@ -1,7 +1,7 @@
-# Makefile for the Deli DL-880D Pro CUPS filter (macOS)
+# Makefile for the Deli DL-888D PRO CUPS filter (macOS)
 #
 # Targets:
-#   make            - builds rastertotspl
+#   make              - builds rastertotspl
 #   sudo make install - installs filter + PPD into CUPS
 #   sudo make uninstall
 
@@ -10,12 +10,11 @@ CFLAGS  ?= -O2 -Wall -Wextra -std=c11
 LDFLAGS ?=
 LIBS     = -lcupsimage -lcups
 
-# macOS CUPS paths
 CUPS_FILTER_DIR ?= /usr/libexec/cups/filter
 CUPS_PPD_DIR    ?= /Library/Printers/PPDs/Contents/Resources
 
 FILTER = rastertotspl
-PPD    = deli-dl880d.ppd
+PPD    = deli-dl888d-pro.ppd
 
 all: $(FILTER)
 
@@ -28,10 +27,8 @@ install: $(FILTER) $(PPD)
 	install -d $(CUPS_PPD_DIR)
 	install -m 0644 $(PPD) $(CUPS_PPD_DIR)/$(PPD)
 	@echo ""
-	@echo "Installed. Now add the printer:"
-	@echo "  System Settings > Printers & Scanners > Add Printer"
-	@echo "  Use 'Select Software...' and pick 'Deli DL-880D Pro (TSPL)'"
-	@echo ""
+	@echo "Installed. Add the printer via System Settings or:"
+	@echo "  lpadmin -p Deli_DL888D_PRO -E -v <URI> -P $(CUPS_PPD_DIR)/$(PPD)"
 
 uninstall:
 	rm -f $(CUPS_FILTER_DIR)/$(FILTER)
@@ -39,5 +36,8 @@ uninstall:
 
 clean:
 	rm -f $(FILTER) *.o
+
+distclean: clean
+	rm -rf output/ pkg-build/
 
 .PHONY: all install uninstall clean

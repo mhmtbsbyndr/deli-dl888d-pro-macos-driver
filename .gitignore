@@ -2,3 +2,5 @@ rastertotspl
 *.o
 *.dSYM/
 .DS_Store
+pkg-build/
+output/
