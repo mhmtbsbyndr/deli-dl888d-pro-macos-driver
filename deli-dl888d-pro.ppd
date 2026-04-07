@@ -10,6 +10,9 @@
 *cupsManualCopies: True
 *cupsFilter: "application/vnd.cups-raster 100 rastertotspl"
 *cupsModelNumber: 0
+*HWMargins: 0 0 0 0
+*MaxMediaWidth: "320"
+*MaxMediaHeight: "3024"
 *ModelName: "Deli DL-888D PRO"
 *ShortNickName: "Deli DL-888D PRO"
 *NickName: "Deli DL-888D PRO (TSPL, 300 dpi)"

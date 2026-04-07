@@ -37,6 +37,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <signal.h>
+#include <locale.h>
 
 /* ---- CLI options parsed from PPD ---- */
 static int opt_density = 8;       /* 0..15          */
@@ -108,7 +109,12 @@ static void compute_geometry(const cups_page_header2_t *hdr,
 static void emit_tspl_header(double w_mm, double h_mm,
                              int num_options, cups_option_t *options)
 {
-    printf("SIZE %.1f mm,%.1f mm\r\n", w_mm, h_mm);
+    /* Use integer mm only — no floats, no printf decimal-point locale
+     * dependency. TSPL accepts integer mm, and 1 mm precision is more
+     * than enough for label sizes. Rounding up by 0.5 gives nearest int. */
+    long w_mm_i = (long)(w_mm + 0.5);
+    long h_mm_i = (long)(h_mm + 0.5);
+    printf("SIZE %ld mm,%ld mm\r\n", w_mm_i, h_mm_i);
 
     const char *gap = cupsGetOption("MediaGap", num_options, options);
     if (gap && !strcmp(gap, "BlackMark"))
@@ -166,6 +172,16 @@ static int emit_page_bitmap(cups_raster_t *ras,
 
 int main(int argc, char *argv[])
 {
+    /* CRITICAL: Force C locale for all numeric output. CUPS passes the
+     * job's LANG (often de_DE.UTF-8 on German macOS) into the filter
+     * environment. Any CUPS library call may then internally invoke
+     * setlocale(LC_ALL, "") and switch the decimal separator to ",".
+     * That would turn `SIZE 60.0 mm,30.0 mm` into `SIZE 60,0 mm,30,0 mm`
+     * which TSPL parses as garbage — the printer then uses its last
+     * cached SIZE (e.g. factory default 100x150 mm) and feeds several
+     * blank labels per job. This single line is the fix for that. */
+    setlocale(LC_NUMERIC, "C");
+
     if (argc < 6 || argc > 7) {
         fputs("Usage: rastertotspl job-id user title copies options [file]\n",
               stderr);

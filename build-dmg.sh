@@ -16,7 +16,7 @@ set -euo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
 cd "$HERE"
 
-VERSION="1.2.0"
+VERSION="1.3.0"
 IDENTIFIER="com.mhmtbsbyndr.deli.dl888d.driver"
 PRODUCT_NAME="Deli DL-888D PRO Driver"
 DMG_VOLNAME="Deli DL-888D PRO Driver"
@@ -88,8 +88,11 @@ productbuild \
 
 # 5) DMG
 say "Creating DMG"
-# Extra goodies inside the DMG
+# Extras inside the DMG: README, troubleshooting, raw test print script
 cp "$HERE/README.md" "$DMG_STAGE/README.md"
+cp "$HERE/pkg/dmg-extras/Troubleshooting.txt" "$DMG_STAGE/Troubleshooting.txt"
+cp "$HERE/pkg/dmg-extras/Test Print.command"  "$DMG_STAGE/Test Print.command"
+chmod +x "$DMG_STAGE/Test Print.command"
 
 hdiutil create \
     -volname "$DMG_VOLNAME" \

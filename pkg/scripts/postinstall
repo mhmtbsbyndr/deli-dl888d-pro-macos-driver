@@ -17,6 +17,7 @@ LOG="/var/log/install.log"
 FILTER_BIN="/usr/libexec/cups/filter/rastertotspl"
 PPD_FILE="/Library/Printers/PPDs/Contents/Resources/deli-dl888d-pro.ppd"
 PRINTER_NAME="Deli_DL888D_PRO"
+RAW_QUEUE_NAME="Deli_DL888D_PRO_Raw"
 
 log() { echo "[deli-driver] $*" | tee -a "$LOG" ; }
 
@@ -80,6 +81,25 @@ if [[ $? -eq 0 ]]; then
     log "queue $PRINTER_NAME created successfully"
 else
     log "ERROR: lpadmin failed to add queue"
+fi
+
+# 5) Second queue as a RAW path for diagnostics (no filter, no PPD).
+#    The Test Print.command in the DMG sends known-good TSPL here to
+#    verify the USB + printer path independently of rastertotspl.
+if /usr/bin/lpstat -p "$RAW_QUEUE_NAME" >/dev/null 2>&1 ; then
+    log "existing raw queue $RAW_QUEUE_NAME found — removing before re-adding"
+    /usr/sbin/lpadmin -x "$RAW_QUEUE_NAME" 2>>"$LOG" || true
+fi
+/usr/sbin/lpadmin -p "$RAW_QUEUE_NAME" -E \
+    -v "$URI" \
+    -o printer-is-shared=false \
+    2>>"$LOG"
+if [[ $? -eq 0 ]]; then
+    /usr/bin/cupsenable  "$RAW_QUEUE_NAME" 2>>"$LOG" || true
+    /usr/sbin/cupsaccept "$RAW_QUEUE_NAME" 2>>"$LOG" || true
+    log "raw diagnostics queue $RAW_QUEUE_NAME created"
+else
+    log "WARN: failed to create raw diagnostics queue"
 fi
 
 log "postinstall done"
