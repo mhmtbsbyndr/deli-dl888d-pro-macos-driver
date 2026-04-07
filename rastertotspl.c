@@ -42,7 +42,7 @@
 /* Embedded version string — visible via `strings rastertotspl` and
  * via `rastertotspl --version`. Used by the Diagnose.command script
  * to confirm which driver version is actually installed. */
-static const char version_string[] = "rastertotspl v1.4.0 (Deli DL-888D PRO CUPS driver)";
+static const char version_string[] = "rastertotspl v1.5.0 (Deli DL-888D PRO CUPS driver)";
 
 /* ---- CLI options parsed from PPD ---- */
 static int opt_density = 8;       /* 0..15          */
@@ -114,6 +114,15 @@ static void compute_geometry(const cups_page_header2_t *hdr,
 static void emit_tspl_header(double w_mm, double h_mm,
                              int num_options, cups_option_t *options)
 {
+    /* CRITICAL for Deli firmware: reset the printer state before every
+     * job. Without INITIALPRINTER, the printer keeps its last SIZE/GAP
+     * values (factory default 100x150 mm = 5 x 30 mm label advance)
+     * and our subsequent SIZE command is effectively ignored. This
+     * produces the classic "4 blank labels + content on 5/6" symptom.
+     * Verified empirically on a DL-888D PRO: tests without
+     * INITIALPRINTER reproduced the bug, tests with it printed cleanly. */
+    printf("INITIALPRINTER\r\n");
+
     /* Use integer mm only — no floats, no printf decimal-point locale
      * dependency. TSPL accepts integer mm, and 1 mm precision is more
      * than enough for label sizes. Rounding up by 0.5 gives nearest int. */
