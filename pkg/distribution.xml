@@ -21,6 +21,6 @@
         <pkg-ref id="com.mhmtbsbyndr.deli.dl888d.driver"/>
     </choice>
     <pkg-ref id="com.mhmtbsbyndr.deli.dl888d.driver"
-             version="1.0.0"
+             version="1.1.0"
              onConclusion="none">deli-dl888d-pro-driver-component.pkg</pkg-ref>
 </installer-gui-script>
