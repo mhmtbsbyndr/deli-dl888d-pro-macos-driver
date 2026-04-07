@@ -16,7 +16,7 @@ set -euo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
 cd "$HERE"
 
-VERSION="1.3.0"
+VERSION="1.4.0"
 IDENTIFIER="com.mhmtbsbyndr.deli.dl888d.driver"
 PRODUCT_NAME="Deli DL-888D PRO Driver"
 DMG_VOLNAME="Deli DL-888D PRO Driver"
@@ -88,11 +88,14 @@ productbuild \
 
 # 5) DMG
 say "Creating DMG"
-# Extras inside the DMG: README, troubleshooting, raw test print script
-cp "$HERE/README.md" "$DMG_STAGE/README.md"
-cp "$HERE/pkg/dmg-extras/Troubleshooting.txt" "$DMG_STAGE/Troubleshooting.txt"
-cp "$HERE/pkg/dmg-extras/Test Print.command"  "$DMG_STAGE/Test Print.command"
-chmod +x "$DMG_STAGE/Test Print.command"
+# Extras inside the DMG: README, troubleshooting, protocol test scripts
+cp "$HERE/README.md"                              "$DMG_STAGE/README.md"
+cp "$HERE/pkg/dmg-extras/Troubleshooting.txt"     "$DMG_STAGE/Troubleshooting.txt"
+cp "$HERE/pkg/dmg-extras/01 Test TSPL.command"    "$DMG_STAGE/01 Test TSPL.command"
+cp "$HERE/pkg/dmg-extras/02 Test ZPL.command"     "$DMG_STAGE/02 Test ZPL.command"
+cp "$HERE/pkg/dmg-extras/03 Calibrate.command"    "$DMG_STAGE/03 Calibrate.command"
+cp "$HERE/pkg/dmg-extras/04 Diagnose.command"     "$DMG_STAGE/04 Diagnose.command"
+chmod +x "$DMG_STAGE"/*.command
 
 hdiutil create \
     -volname "$DMG_VOLNAME" \

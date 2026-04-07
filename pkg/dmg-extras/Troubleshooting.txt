@@ -1,64 +1,83 @@
-Deli DL-888D PRO macOS Driver — Troubleshooting
-=================================================
+Deli DL-888D PRO — Troubleshooting Decision Tree
+==================================================
 
-STEP 1: Install the driver
-  Double-click `Install Deli DL-888D PRO Driver.pkg` in this DMG.
-  If Gatekeeper blocks it: right-click → Open → Open Anyway
-  (or Settings → Privacy & Security → "Open Anyway").
+You're still seeing "4 empty labels + 5/6 half-half" or similar bad
+feeding. Follow these steps in order — do NOT skip ahead.
 
-  The installer creates two CUPS queues automatically:
-    - Deli_DL888D_PRO      → normal queue (filter + PPD)
-    - Deli_DL888D_PRO_Raw  → raw TSPL queue for diagnostics
+Step 1 — Install v1.4.0
+  Double-click "Install Deli DL-888D PRO Driver.pkg".
+  Installer creates BOTH queues automatically:
+    Deli_DL888D_PRO      (normal, filter + PPD)
+    Deli_DL888D_PRO_Raw  (raw TSPL/ZPL passthrough)
 
-STEP 2: Run the raw test print
-  Double-click `Test Print.command`.
-  You should see ONE 60 x 30 mm label with a border and the words
-  "DELI TEST / 60 x 30 mm / raw TSPL OK".
+Step 2 — Is the printer calibrated to its label stock?
+  Double-click "03 Calibrate.command".
+  Printer should feed 2-3 blank labels and stop.
+  If it does NOT feed at all, do the HARDWARE calibration:
+    - Power OFF
+    - Hold FEED button and power ON (keep holding)
+    - Release when the status LED blinks red twice
+    - Printer auto-feeds 2-3 labels
+    - Power cycle
 
-  • If this works → the USB path + printer + TSPL parser are all fine.
-    Proceed to step 3 (normal printing).
+Step 3 — What protocol does your printer speak?
+  a. Double-click "01 Test TSPL.command".
+     Expected: ONE 60x30 mm label with a border and three lines of
+     text: "TSPL TEST / 60 x 30 mm / Deli DL-888D PRO".
+     → If this works, TSPL is correct. Go to Step 4.
+     → If nothing happens or blanks feed, go to (b).
 
-  • If labels come out blank or content spans multiple labels →
-    the printer needs physical gap calibration:
-      1. Power OFF the printer.
-      2. Hold the FEED button while powering it ON.
-      3. Keep holding until the LED blinks red twice.
-      4. Release. The printer feeds 2-3 labels to measure the gap.
-      5. Power cycle. Re-run the Test Print.
+  b. Double-click "02 Test ZPL.command".
+     Expected: ONE 60x30 mm label with three lines of text.
+     → If this works, your printer is a ZPL device, NOT TSPL.
+       Send the diagnose report (Step 5) and I'll rewrite the
+       filter to emit ZPL.
+     → If nothing works, go to (c).
 
-STEP 3: Normal printing from an app
-  Open any app (Preview, Pages, TextEdit, etc.).
-  In the print dialog:
-    - Printer: Deli_DL888D_PRO
-    - Paper size: pick one of the 28 presets (e.g. "60 x 30 mm")
-    - Print.
+  c. Run "04 Diagnose.command", send me the report on the Desktop.
 
-  If the paper sizes don't appear in the dropdown:
-    - Open System Settings → Printers & Scanners
-    - Select Deli_DL888D_PRO → Options & Supplies → Options
-    - Verify Resolution = 300 dpi and Density = 8
+Step 4 — TSPL test works, but normal printing from apps doesn't
+  This means the rastertotspl filter is still wrong. Run
+  "04 Diagnose.command" — the report includes a dry-run of the
+  filter against a synthetic 60x30 mm input. Send me:
+    - The report file from the Desktop
+    - Whether the dry-run TSPL starts with `SIZE 60 mm,30 mm` or
+      something else (locale bug would show `SIZE 60,0 mm,30,0 mm`)
 
-STEP 4: Diagnosing bad output
-  Run in Terminal:
-      log show --style compact --last 2m \
-        --predicate 'process == "cupsd"' | grep DEBUG
+Step 5 — Diagnose report
+  Double-click "04 Diagnose.command". It writes
+      ~/Desktop/deli-diagnose-<date>-<time>.txt
+  and opens it. Copy the entire content and paste it in the issue
+  tracker or to me directly. The report includes:
+    - Driver version actually installed
+    - PPD file info
+    - Both queue states
+    - USB device info
+    - Last 50 CUPS error log lines
+    - A dry-run of rastertotspl against a synthetic input
+      (first 400 bytes of TSPL output, hex + text)
+  This lets me see exactly what your system is doing without having
+  physical access to the printer.
 
-  You should see a line like:
-      DEBUG: page=1 PageSize=[170,85]pt->60x30mm raster=708x354@300x300dpi ...
+Common symptom → cause map
+--------------------------
+4 blank + 5/6 half-half    → Printer interprets SIZE as bigger than
+                             60x30, feeding ~5 labels per job.
+                             Possible causes:
+                               - Printer needs gap calibration
+                                 (Step 2)
+                               - Printer doesn't speak TSPL
+                                 (Step 3b — try ZPL)
+                               - Filter is emitting wrong SIZE
+                                 (Step 5 — diagnose report)
 
-  The PageSize in points must match your selected paper (60x30 = [170,85]).
-  If it doesn't, the app sent the wrong paper size — re-check the
-  print dialog.
+Nothing prints at all      → USB connection / backend issue.
+                             Check `lpinfo -v` shows the printer.
+                             Check lpstat -p shows queue is idle.
+                             Run "04 Diagnose.command".
 
-STEP 5: Uninstall
-  Open Terminal and run:
-      sudo lpadmin -x Deli_DL888D_PRO
-      sudo lpadmin -x Deli_DL888D_PRO_Raw
-      sudo rm -f /usr/libexec/cups/filter/rastertotspl
-      sudo rm -f /Library/Printers/PPDs/Contents/Resources/deli-dl888d-pro.ppd
-      sudo launchctl kickstart -k system/org.cups.cupsd
+Garbage characters print   → Wrong protocol. Try 02 Test ZPL.command.
 
-Log files:
-  - Install log:  /var/log/install.log   (search for "[deli-driver]")
-  - CUPS log:     /var/log/cups/error_log
-  - unified log:  log show --last 10m --predicate 'process == "cupsd"'
+Correct label but shifted  → Adjust *Density and *Speed in PPD via
+                             Printer Options, or add REFERENCE X,Y
+                             values.

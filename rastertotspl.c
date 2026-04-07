@@ -39,6 +39,11 @@
 #include <signal.h>
 #include <locale.h>
 
+/* Embedded version string — visible via `strings rastertotspl` and
+ * via `rastertotspl --version`. Used by the Diagnose.command script
+ * to confirm which driver version is actually installed. */
+static const char version_string[] = "rastertotspl v1.4.0 (Deli DL-888D PRO CUPS driver)";
+
 /* ---- CLI options parsed from PPD ---- */
 static int opt_density = 8;       /* 0..15          */
 static int opt_speed   = 3;       /* ips            */
@@ -182,9 +187,17 @@ int main(int argc, char *argv[])
      * blank labels per job. This single line is the fix for that. */
     setlocale(LC_NUMERIC, "C");
 
+    /* CLI: --version prints the embedded version and exits.
+     * Not called by CUPS — only by Diagnose.command. */
+    if (argc == 2 && (!strcmp(argv[1], "--version") || !strcmp(argv[1], "-v"))) {
+        printf("%s\n", version_string);
+        return 0;
+    }
+
     if (argc < 6 || argc > 7) {
         fputs("Usage: rastertotspl job-id user title copies options [file]\n",
               stderr);
+        fprintf(stderr, "%s\n", version_string);
         return 1;
     }
 
