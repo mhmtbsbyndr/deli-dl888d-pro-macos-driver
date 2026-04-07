@@ -1,0 +1,105 @@
+*PPD-Adobe: "4.3"
+*FormatVersion: "4.3"
+*FileVersion: "1.0"
+*LanguageVersion: English
+*LanguageEncoding: ISOLatin1
+*PCFileName: "DELI880D.PPD"
+*Manufacturer: "Deli"
+*Product: "(DL-880D Pro)"
+*cupsVersion: 2.0
+*cupsManualCopies: True
+*cupsFilter: "application/vnd.cups-raster 100 rastertotspl"
+*cupsModelNumber: 0
+*ModelName: "Deli DL-880D Pro"
+*ShortNickName: "Deli DL-880D Pro"
+*NickName: "Deli DL-880D Pro (TSPL)"
+*PSVersion: "(3010.000) 0"
+*LanguageLevel: "3"
+*ColorDevice: False
+*DefaultColorSpace: Gray
+*FileSystem: False
+*Throughput: "8"
+*LandscapeOrientation: Plus90
+*VariablePaperSize: True
+*TTRasterizer: Type42
+
+*OpenUI *PageSize/Media Size: PickOne
+*OrderDependency: 10 AnySetup *PageSize
+*DefaultPageSize: w288h432
+*PageSize w288h432/100 x 150 mm: "<</PageSize[288 432]/ImagingBBox null>>setpagedevice"
+*PageSize w288h192/100 x  67 mm: "<</PageSize[288 192]/ImagingBBox null>>setpagedevice"
+*PageSize w227h113/ 80 x  40 mm: "<</PageSize[227 113]/ImagingBBox null>>setpagedevice"
+*PageSize w170h113/ 60 x  40 mm: "<</PageSize[170 113]/ImagingBBox null>>setpagedevice"
+*PageSize w113h 85/ 40 x  30 mm: "<</PageSize[113 85]/ImagingBBox null>>setpagedevice"
+*PageSize Custom/Custom Size: ""
+*CustomPageSize True: "pop pop pop <</PageSize[5 -2 roll]/ImagingBBox null>>setpagedevice"
+*ParamCustomPageSize Width: 1 points 36 864
+*ParamCustomPageSize Height: 2 points 36 3024
+*ParamCustomPageSize WidthOffset: 3 points 0 0
+*ParamCustomPageSize HeightOffset: 4 points 0 0
+*ParamCustomPageSize Orientation: 5 int 0 0
+*CloseUI: *PageSize
+
+*OpenUI *PageRegion: PickOne
+*OrderDependency: 10 AnySetup *PageRegion
+*DefaultPageRegion: w288h432
+*PageRegion w288h432/100 x 150 mm: "<</PageSize[288 432]/ImagingBBox null>>setpagedevice"
+*PageRegion w288h192/100 x  67 mm: "<</PageSize[288 192]/ImagingBBox null>>setpagedevice"
+*PageRegion w227h113/ 80 x  40 mm: "<</PageSize[227 113]/ImagingBBox null>>setpagedevice"
+*PageRegion w170h113/ 60 x  40 mm: "<</PageSize[170 113]/ImagingBBox null>>setpagedevice"
+*PageRegion w113h 85/ 40 x  30 mm: "<</PageSize[113 85]/ImagingBBox null>>setpagedevice"
+*CloseUI: *PageRegion
+
+*DefaultImageableArea: w288h432
+*ImageableArea w288h432: "0 0 288 432"
+*ImageableArea w288h192: "0 0 288 192"
+*ImageableArea w227h113: "0 0 227 113"
+*ImageableArea w170h113: "0 0 170 113"
+*ImageableArea w113h 85: "0 0 113 85"
+
+*DefaultPaperDimension: w288h432
+*PaperDimension w288h432: "288 432"
+*PaperDimension w288h192: "288 192"
+*PaperDimension w227h113: "227 113"
+*PaperDimension w170h113: "170 113"
+*PaperDimension w113h 85: "113 85"
+
+*OpenUI *Resolution/Resolution: PickOne
+*OrderDependency: 20 AnySetup *Resolution
+*DefaultResolution: 203dpi
+*Resolution 203dpi/203 DPI: "<</HWResolution[203 203]/cupsBitsPerColor 1/cupsColorSpace 3/cupsCompression 0>>setpagedevice"
+*CloseUI: *Resolution
+
+*OpenUI *Density/Print Darkness: PickOne
+*OrderDependency: 30 AnySetup *Density
+*DefaultDensity: 8
+*Density 1/1 (lightest): ""
+*Density 4/4: ""
+*Density 8/8 (default): ""
+*Density 12/12: ""
+*Density 15/15 (darkest): ""
+*CloseUI: *Density
+
+*OpenUI *Speed/Print Speed: PickOne
+*OrderDependency: 30 AnySetup *Speed
+*DefaultSpeed: 4
+*Speed 2/2 ips: ""
+*Speed 3/3 ips: ""
+*Speed 4/4 ips (default): ""
+*Speed 5/5 ips: ""
+*Speed 6/6 ips: ""
+*CloseUI: *Speed
+
+*OpenUI *MediaGap/Media Gap: PickOne
+*OrderDependency: 30 AnySetup *MediaGap
+*DefaultMediaGap: Gap2mm
+*MediaGap Gap2mm/2 mm gap (die-cut): ""
+*MediaGap Gap3mm/3 mm gap: ""
+*MediaGap Continuous/Continuous roll: ""
+*MediaGap BlackMark/Black mark: ""
+*CloseUI: *MediaGap
+
+*DefaultFont: Courier
+*Font Courier: Standard "(002.004S)" Standard ROM
+
+*% End of PPD file

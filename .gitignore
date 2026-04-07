@@ -1,0 +1,4 @@
+rastertotspl
+*.o
+*.dSYM/
+.DS_Store
